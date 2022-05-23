@@ -1,34 +1,49 @@
 <div class="container text-center">
-  <h1 class="p-5">Enter your JSON</h1>
-  <div class="row mb-3">
-    <div class="col-12 col-md-4">
+  <h1 class="p-5">Введите JSON</h1>
+  <div class="row mb-3" *ngIf="formJSON.length">
+    <div class="col-12 col-md-4" *ngFor="let title of titles">
       <div class="card shadow-sm m-2">
-        <h3 class="card-header">title</h3>
+        <h3 class="card-header">{{ title | titlecase }}</h3>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item p-0">
-            <input class="form-control list-group-item" type="text" />
+          <li class="list-group-item p-0" *ngFor="let value of formJSON">
+            <input
+              class="form-control list-group-item"
+              type="text"
+              [disabled]="!isFormReady"
+              [(ngModel)]="value[title]"
+            />
           </li>
         </ul>
       </div>
     </div>
   </div>
 
-  <form novalidate>
-    <div class="input-group flex-column justify-content-center">
+  <form [formGroup]="formGroup" (ngSubmit)="submit()" novalidate>
+    <div class="input-group-append flex-column">
       <textarea
         aria-describedby="button"
         type="text"
-        class="mb-3"
+        class="w-50 mb-3"
         rows="3"
         formControlName="value"
       ></textarea>
-      <div class="mb-3 error">
-        <span>Required field</span>
-        <span>Please, enter correct JSON</span>
+      <div
+        class="mb-3 error"
+        *ngIf="controlJSON.invalid && controlJSON.touched"
+      >
+        <span *ngIf="controlJSON.errors!['required']">Обязательное поле</span>
+        <span *ngIf="controlJSON.errors!['pattern']"
+          >Пожалуйста, введите корректный JSON</span
+        >
       </div>
       <div class="input-group-append">
-        <button id="button" class="btn btn-primary mb-3" type="submit">
-          Convert
+        <button
+          id="button"
+          [disabled]="formGroup.invalid"
+          class="btn btn-primary mb-3"
+          type="submit"
+        >
+          {{ buttonText }}
         </button>
       </div>
     </div>
