@@ -26,6 +26,7 @@
         class="w-50 mb-3"
         rows="3"
         formControlName="value"
+        placeholder="Введите массив JSON объектов"
       ></textarea>
       <div
         class="mb-3 error"
@@ -45,6 +46,15 @@
         >
           {{ buttonText }}
         </button>
+        <div class="input-group-append mb-3">
+          <input
+            type="checkbox"
+            id="checkbox"
+            [(ngModel)]="isDownload"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <label for="checkbox">Скачать JSON</label>
+        </div>
       </div>
       <input type="file" (change)="loadFromFile($event)" />
     </div>

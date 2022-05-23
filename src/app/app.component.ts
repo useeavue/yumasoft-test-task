@@ -13,6 +13,7 @@ export class AppComponent {
   public buttonText: string = 'Продолжить';
   public uploadButtonText: string = 'Загрузить из файла';
   public isFormReady: boolean = false;
+  public isDownload: boolean = false;
 
   constructor() {
     this.formGroup = new FormGroup({
@@ -50,10 +51,24 @@ export class AppComponent {
   }
 
   private outputJSON(): void {
+    if (this.isDownload) {
+      this.downloadFile();
+    }
     this.controlJSON.setValue(JSON.stringify(this.formJSON));
     this.controlJSON.enable();
     this.buttonText = 'Продолжить';
     this.isFormReady = false;
+  }
+
+  private downloadFile(): void {
+    const a = document.createElement('a');
+    const file = new Blob([JSON.stringify(this.formJSON)], {
+      type: 'application/json',
+    });
+    a.href = URL.createObjectURL(file);
+    a.download = 'data.json';
+    a.click();
+    a.remove();
   }
 
   public submit(): void {
