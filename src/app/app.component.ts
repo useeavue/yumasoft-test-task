@@ -11,6 +11,7 @@ export class AppComponent {
   public formJSON: Array<any> = [];
   public titles: string[] = [];
   public buttonText: string = 'Продолжить';
+  public uploadButtonText: string = 'Загрузить из файла';
   public isFormReady: boolean = false;
 
   constructor() {
@@ -28,14 +29,24 @@ export class AppComponent {
     return this.formGroup.get('value') as FormControl;
   }
 
-  private inputJSON(): void {
-    this.formJSON = JSON.parse(this.controlJSON.value);
+  public inputJSON(data: any): void {
+    this.formJSON = JSON.parse(data);
     this.formJSON.forEach((value) => {
-      this.titles = Object.keys(value);
+      if (this.titles.length < Object.keys(value).length) {
+        this.titles = Object.keys(value);
+      }
     });
     this.controlJSON.disable();
     this.buttonText = 'Выгрузить';
     this.isFormReady = true;
+  }
+
+  public loadFromFile(fileInputValue: any) {
+    const fileReader: FileReader = new FileReader();
+    fileReader.readAsText(fileInputValue.target.files[0]);
+    fileReader.onload = () => {
+      this.inputJSON(fileReader.result);
+    };
   }
 
   private outputJSON(): void {
@@ -46,6 +57,8 @@ export class AppComponent {
   }
 
   public submit(): void {
-    !this.isFormReady ? this.inputJSON() : this.outputJSON();
+    !this.isFormReady
+      ? this.inputJSON(this.controlJSON.value)
+      : this.outputJSON();
   }
 }

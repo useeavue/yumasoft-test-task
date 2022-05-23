@@ -1,5 +1,5 @@
 <div class="container text-center">
-  <h1 class="p-5">Введите JSON</h1>
+  <h1 class="p-5">Редактор JSON</h1>
   <div class="row mb-3" *ngIf="formJSON.length">
     <div class="col-12 col-md-4" *ngFor="let title of titles">
       <div class="card shadow-sm m-2">
@@ -46,6 +46,7 @@
           {{ buttonText }}
         </button>
       </div>
+      <input type="file" (change)="loadFromFile($event)" />
     </div>
   </form>
 </div>
